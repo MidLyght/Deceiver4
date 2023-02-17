@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#47275F"
+    tools:context=".Fragments.MainPageFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/behindBtnsMainPage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="225dp"
+            android:rotation="0"
+            android:src="@android:drawable/screen_background_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#4E2D67" />
+
+        <ImageView
+            android:id="@+id/logoMainPage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="430dp"
+            android:src="@drawable/eye"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/eye_text"
+            app:tint="#BCBBBB" />
+
+        <Button
+            android:id="@+id/btnPlayMainPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="400dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="#BCBBBB"
+            android:text="play"
+            app:layout_constraintBottom_toTopOf="@+id/btnIntroMainPage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btnIntroMainPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="175dp"
+            android:backgroundTint="#BCBBBB"
+            android:text="introduction"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/btnSettingsMainPage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="610dp"
+            android:layout_marginEnd="320dp"
+            android:src="@drawable/settingsicon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#BCBBBB" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

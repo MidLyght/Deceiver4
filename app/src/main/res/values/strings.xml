@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Deceiver</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="Roles">
+        <item>Werewolf</item>
+        <item>WerewolfSeer</item>
+        <item>Witch</item>
+        <item>Hunter</item>
+        <item>Healer</item>
+        <item>Townsperson</item>
+        <item>Townsperson</item>
+        <item>Townsperson</item>
+        <item>Townsperson</item>
+    </string-array>
+</resources>
