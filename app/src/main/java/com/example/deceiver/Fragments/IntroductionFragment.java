@@ -86,10 +86,10 @@ public class IntroductionFragment extends Fragment {
         introToTutorialImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HowToPlayFragment howToPlayFragment=new HowToPlayFragment();
+                StandardGameTutorialFragment standardGameTutorialFragment=new StandardGameTutorialFragment();
                 FragmentManager manager=getFragmentManager();
                 manager.beginTransaction()
-                        .replace(R.id.frameLayoutMainPage,howToPlayFragment,howToPlayFragment.getTag())
+                        .replace(R.id.frameLayoutMainPage,standardGameTutorialFragment,standardGameTutorialFragment.getTag())
                         .addToBackStack(null)
                         .commit();
             }
