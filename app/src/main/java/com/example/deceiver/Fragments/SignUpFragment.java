@@ -160,11 +160,12 @@ public class SignUpFragment extends Fragment {
     }
 
     public void addUserToFirestore() {
-        DocumentReference newUserRef=fbs.getFire().collection("users").document(usernameEt.getText().toString());
+        DocumentReference newUserRef=fbs.getFire().collection("users").document(mailEt.getText().toString());
 
         Map<String,Object> user=new HashMap<>();
-        user.put("Email",mailEt.getText().toString());
+        user.put("Username",usernameEt.getText().toString());
         user.put("Password",passEt.getText().toString());
+        user.put("Wins",0);
 
         newUserRef.set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

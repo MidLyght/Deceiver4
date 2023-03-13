@@ -1,12 +1,16 @@
 package com.example.deceiver.Fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +23,15 @@ import com.example.deceiver.Activities.StandardGameActivity;
 import com.example.deceiver.DataClasses.StandardCharacter;
 import com.example.deceiver.Enums.Phase;
 import com.example.deceiver.Enums.StandardRole;
+import com.example.deceiver.FirebaseServices;
 import com.example.deceiver.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +41,7 @@ import java.util.ArrayList;
 public class StandardGameDayFragment extends Fragment {
 
     private View objectStandardGameDayFragment;
+    private FirebaseServices fbs;
     public StandardGameActivity sga;
     private ImageView c1,c2,c3,c4,c5,c6,c7,c8,c1dead,c2dead,c3dead,c4dead,c5dead,c6dead,c7dead,c8dead,c1role,c2role,c3role,c4role,c5role,c6role,c7role,c8role,c1lynch,c2lynch,c3lynch,c4lynch,c5lynch,c6lynch,c7lynch,c8lynch,nextPhase;
     private TextView dayNum;
@@ -92,6 +103,7 @@ public class StandardGameDayFragment extends Fragment {
 
     private void attachComponents() {
         sga=(StandardGameActivity) getActivity();
+        fbs=FirebaseServices.getInstance();
 
         order=sga.order;
 
@@ -177,6 +189,9 @@ public class StandardGameDayFragment extends Fragment {
                 sga.dayCount++;
 
                 if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
+                    DocumentReference newUserRef=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+                    newUserRef.update("Wins",+1);
+
                     createVillageWinPopup();
                 }
 
@@ -522,7 +537,8 @@ public class StandardGameDayFragment extends Fragment {
         decRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),StandardGameActivity.class));
+                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+                startActivity(standardGameActivityIntent);
             }
         });
 
@@ -555,7 +571,8 @@ public class StandardGameDayFragment extends Fragment {
         vilRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),StandardGameActivity.class));
+                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+                startActivity(standardGameActivityIntent);
             }
         });
 

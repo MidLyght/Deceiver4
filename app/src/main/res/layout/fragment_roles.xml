@@ -57,7 +57,7 @@
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Part of the deceiver team. Can choose a player to attempt to kill them at night time. If the attempt succeeds, the death of the chosen player is announced, but the identity of the deceiver remains unrevealed."
+                android:text="Part of the deceiver team. Can choose a player to attempt to kill them at night time."
                 android:textColor="#919191"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -91,8 +91,7 @@
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Part of the deceiver team. Plays like an ordinary farmer, except if the deceiver dies, the traitor takes on their role.
-The traitor is on the deceiver’s team at all points of the game."
+                android:text="Part of the deceiver team. Plays like an ordinary farmer, except if the deceiver dies, the traitor takes on their role."
                 android:textColor="#919191"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -264,9 +263,7 @@ If the chosen player is attacked at night, the guard dies in their place, and th
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Part of the village team. Can forge a sword to defend themselves over the period of 3 days.
-After 3 days of the game have elapsed, the blacksmith receives a sword, allowing them to defend themselves from vicious attacks at night time.
-If the blacksmith is attacked during the night time, they can use their sword to heavily wound the attacker, causing this attack and the one after it to be dismissed.
-Once the blacksmith uses their sword for the first time, their role is announced publicly."
+When the blacksmith forges the sword, they become unkillable, and everytime the deceiver attacks them they are wounded and become unable to attack players for a round."
                 android:textColor="#919191"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"

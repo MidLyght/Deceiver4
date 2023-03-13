@@ -1,5 +1,6 @@
 package com.example.deceiver.Fragments;
 
+import static android.content.ContentValues.TAG;
 import static com.example.deceiver.Enums.StandardRole.Deceiver;
 import static com.example.deceiver.Enums.StandardRole.Seer;
 import static com.example.deceiver.Enums.StandardRole.Traitor;
@@ -8,9 +9,11 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +26,15 @@ import com.example.deceiver.Activities.StandardGameActivity;
 import com.example.deceiver.DataClasses.StandardCharacter;
 import com.example.deceiver.Enums.Phase;
 import com.example.deceiver.Enums.StandardRole;
+import com.example.deceiver.FirebaseServices;
 import com.example.deceiver.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -36,6 +45,7 @@ import java.util.Random;
 public class StandardGameNightFragment extends Fragment {
 
     View objectStandardGameNightFragment;
+    private FirebaseServices fbs;
     private StandardCharacter deceiver,traitor,farmer1,farmer2,witch,blacksmith,seer,guard;
     private ImageView c1,c2,c3,c4,c5,c6,c7,c8,c1dead,c2dead,c3dead,c4dead,c5dead,c6dead,c7dead,c8dead,c1role,c2role,c3role,c4role,c5role,c6role,c7role,c8role,nextPhase;
     private TextView dayNum;
@@ -98,6 +108,7 @@ public class StandardGameNightFragment extends Fragment {
 
     private void attachComponents() {
         StandardGameActivity sga=(StandardGameActivity) getActivity();
+        fbs=FirebaseServices.getInstance();
 
         deceiver=sga.deceiver;
         traitor=sga.traitor;
@@ -146,6 +157,9 @@ public class StandardGameNightFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
+                    DocumentReference newUserRef=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+                    newUserRef.update("Wins",+1);
+
                     createVillageWinPopup();
                 }
                 else {
@@ -442,7 +456,8 @@ public class StandardGameNightFragment extends Fragment {
         decRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),StandardGameActivity.class));
+                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+                startActivity(standardGameActivityIntent);
             }
         });
 
@@ -475,7 +490,8 @@ public class StandardGameNightFragment extends Fragment {
         vilRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),StandardGameActivity.class));
+                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+                startActivity(standardGameActivityIntent);
             }
         });
 

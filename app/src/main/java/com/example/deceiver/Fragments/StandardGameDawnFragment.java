@@ -1,5 +1,6 @@
 package com.example.deceiver.Fragments;
 
+import static android.content.ContentValues.TAG;
 import static com.example.deceiver.Enums.StandardRole.Blacksmith;
 import static com.example.deceiver.Enums.StandardRole.Deceiver;
 import static com.example.deceiver.Enums.StandardRole.Farmer;
@@ -13,9 +14,11 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +32,16 @@ import com.example.deceiver.DataClasses.StandardCharacter;
 import com.example.deceiver.Enums.Phase;
 import com.example.deceiver.Enums.StandardRole;
 import com.example.deceiver.Enums.StandardTeam;
+import com.example.deceiver.FirebaseServices;
 import com.example.deceiver.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -51,6 +60,7 @@ public class StandardGameDawnFragment extends Fragment {
     private AlertDialog deceiverDialog,villageDialog;
     private TextView decDays,decDawns,decNights,vilDays,vilDawns,vilNights;
     private Button decRestart,decMenu,vilRestart,vilMenu;
+    private FirebaseServices fbs;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -153,6 +163,7 @@ public class StandardGameDawnFragment extends Fragment {
 
     public void attachComponents(){
         StandardGameActivity sga=(StandardGameActivity) getActivity();
+        fbs=FirebaseServices.getInstance();
 
         deceiver=sga.deceiver;
         traitor=sga.traitor;
@@ -203,6 +214,24 @@ public class StandardGameDawnFragment extends Fragment {
                 sga.dawnCount++;
 
                 if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
+                    DocumentReference newUserRef=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+
+                    Map<String,Object> user=new HashMap<>();
+                    user.put("Wins",+1);
+
+                    newUserRef.set(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
                     createVillageWinPopup();
                 }
 
@@ -425,7 +454,8 @@ public class StandardGameDawnFragment extends Fragment {
         decRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),StandardGameActivity.class));
+                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+                startActivity(standardGameActivityIntent);
             }
         });
 
@@ -458,7 +488,8 @@ public class StandardGameDawnFragment extends Fragment {
         vilRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),StandardGameActivity.class));
+                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+                startActivity(standardGameActivityIntent);
             }
         });
 

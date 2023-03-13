@@ -1,12 +1,16 @@
 package com.example.deceiver.Fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +21,14 @@ import android.widget.TextView;
 import com.example.deceiver.Activities.MainPageActivity;
 import com.example.deceiver.Activities.StandardGameActivity;
 import com.example.deceiver.Enums.Phase;
+import com.example.deceiver.FirebaseServices;
 import com.example.deceiver.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +38,7 @@ import com.example.deceiver.R;
 public class StandardGameNightLogFragment extends Fragment {
 
     public View objectStandardGameNightLogFragment;
+    private FirebaseServices fbs;
     private TextView nightLog;
     private ImageView nextPhase;
     public StandardGameActivity sga;
@@ -83,6 +95,8 @@ public class StandardGameNightLogFragment extends Fragment {
         objectStandardGameNightLogFragment=inflater.inflate(R.layout.fragment_game_night_log,container,false);
 
         sga=(StandardGameActivity) getActivity();
+        fbs=FirebaseServices.getInstance();
+
         nightLog=objectStandardGameNightLogFragment.findViewById(R.id.textView29);
         nextPhase=objectStandardGameNightLogFragment.findViewById(R.id.imgGameNightLogNextPhase);
 
@@ -91,6 +105,9 @@ public class StandardGameNightLogFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
+                    DocumentReference newUserRef=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+                    newUserRef.update("Wins",+1);
+
                     createVillageWinPopup();
                 }
                 else {
@@ -146,7 +163,8 @@ public class StandardGameNightLogFragment extends Fragment {
         decRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),StandardGameActivity.class));
+                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+                startActivity(standardGameActivityIntent);
             }
         });
 
@@ -179,7 +197,8 @@ public class StandardGameNightLogFragment extends Fragment {
         vilRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),StandardGameActivity.class));
+                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+                startActivity(standardGameActivityIntent);
             }
         });
 
