@@ -28,9 +28,12 @@ import com.example.deceiver.Enums.Phase;
 import com.example.deceiver.Enums.StandardRole;
 import com.example.deceiver.FirebaseServices;
 import com.example.deceiver.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,8 +160,12 @@ public class StandardGameNightFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
-                    DocumentReference newUserRef=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
-                    newUserRef.update("Wins",+1);
+                    DocumentReference docRef = fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+
+                    Map<String,Object> user=new HashMap<>();
+                    user.put("Username",user.get("Username"));
+                    user.put("Password",user.get("Password"));
+                    user.put("Wins",Integer.parseInt(user.get("Wins").toString())+1);
 
                     createVillageWinPopup();
                 }

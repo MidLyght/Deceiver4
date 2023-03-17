@@ -189,8 +189,12 @@ public class StandardGameDayFragment extends Fragment {
                 sga.dayCount++;
 
                 if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
-                    DocumentReference newUserRef=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
-                    newUserRef.update("Wins",+1);
+                    DocumentReference newUserRe=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+
+                    Map<String,Object> user=new HashMap<>();
+                    user.put("Username",user.get("Username"));
+                    user.put("Password",user.get("Password"));
+                    user.put("Wins",Integer.parseInt(user.get("Wins").toString())+1);
 
                     createVillageWinPopup();
                 }

@@ -106,7 +106,11 @@ public class StandardGameNightLogFragment extends Fragment {
             public void onClick(View view) {
                 if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
                     DocumentReference newUserRef=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
-                    newUserRef.update("Wins",+1);
+
+                    Map<String,Object> user=new HashMap<>();
+                    user.put("Username",user.get("Username"));
+                    user.put("Password",user.get("Password"));
+                    user.put("Wins",Integer.parseInt(user.get("Wins").toString())+1);
 
                     createVillageWinPopup();
                 }

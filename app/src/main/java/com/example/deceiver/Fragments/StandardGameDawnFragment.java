@@ -217,21 +217,11 @@ public class StandardGameDawnFragment extends Fragment {
                     DocumentReference newUserRef=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
 
                     Map<String,Object> user=new HashMap<>();
-                    user.put("Wins",+1);
+                    user.put("Username",user.get("Username"));
+                    user.put("Password",user.get("Password"));
+                    int a=(Integer.parseInt(user.get("Wins").toString())+1);
+                    user.put("Wins",a);
 
-                    newUserRef.set(user)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "DocumentSnapshot successfully written!");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error writing document", e);
-                                }
-                            });
                     createVillageWinPopup();
                 }
 
