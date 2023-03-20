@@ -2,6 +2,7 @@ package com.example.deceiver.Fragments;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -541,15 +542,16 @@ public class StandardGameDayFragment extends Fragment {
         decRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
-                startActivity(standardGameActivityIntent);
+                Intent i = new Intent(getActivity(), StandardGameActivity.class);
+                startActivity(i);
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         });
 
         decMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), MainPageActivity.class));
+                getActivity().finish();
             }
         });
 
@@ -575,15 +577,16 @@ public class StandardGameDayFragment extends Fragment {
         vilRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
-                startActivity(standardGameActivityIntent);
+                Intent i = new Intent(getActivity(), StandardGameActivity.class);
+                startActivity(i);
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         });
 
         vilMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), MainPageActivity.class));
+                getActivity().finish();
             }
         });
 
