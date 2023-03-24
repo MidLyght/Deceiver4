@@ -7,6 +7,7 @@ import static com.example.deceiver.Enums.StandardRole.Traitor;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -161,40 +162,75 @@ public class StandardGameNightFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
-                    DocumentReference docRef = fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+                    DocumentReference newUserRe=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
 
-                    Map<String,Object> user=new HashMap<>();
-                    user.put("Username",user.get("Username"));
-                    user.put("Password",user.get("Password"));
-                    user.put("Wins",Integer.parseInt(user.get("Wins").toString())+1);
+                    newUserRe.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String username=documentSnapshot.getString("Username");
+                            String password=documentSnapshot.getString("Password");
+                            double wins=documentSnapshot.getDouble("Wins");
+                            double losses=documentSnapshot.getDouble("Losses");
+                            double gamesplayed=documentSnapshot.getDouble("GamesPlayed");
+
+                            Map<String,Object> user=new HashMap<>();
+                            user.put("Username",username);
+                            user.put("Password",password);
+                            user.put("Wins",wins+1);
+                            user.put("Losses",losses);
+                            user.put("GamesPlayed",gamesplayed+1);
+
+                            newUserRe.set(user);
+                        }
+                    });
 
                     createVillageWinPopup();
                 }
-                else {
 
-                    sga.deceiverCount = 2;
+                sga.deceiverCount=2;
 
-                    if (!sga.deceiver.isAlive() && sga.traitor.isAlive() || sga.deceiver.isAlive() && !sga.traitor.isAlive())
-                        sga.deceiverCount = 1;
+                if(!sga.deceiver.isAlive()&&sga.traitor.isAlive()||sga.deceiver.isAlive()&&!sga.traitor.isAlive())
+                    sga.deceiverCount=1;
 
-                    sga.villagerCount = 0;
+                sga.villagerCount=0;
 
-                    if (sga.witch.isAlive())
-                        sga.villagerCount++;
-                    if (sga.farmer1.isAlive())
-                        sga.villagerCount++;
-                    if (sga.farmer2.isAlive())
-                        sga.villagerCount++;
-                    if (sga.blacksmith.isAlive())
-                        sga.villagerCount++;
-                    if (sga.seer.isAlive())
-                        sga.villagerCount++;
-                    if (sga.guard.isAlive())
-                        sga.villagerCount++;
+                if(sga.witch.isAlive())
+                    sga.villagerCount++;
+                if(sga.farmer1.isAlive())
+                    sga.villagerCount++;
+                if(sga.farmer2.isAlive())
+                    sga.villagerCount++;
+                if(sga.blacksmith.isAlive())
+                    sga.villagerCount++;
+                if(sga.seer.isAlive())
+                    sga.villagerCount++;
+                if(sga.guard.isAlive())
+                    sga.villagerCount++;
 
-                    if (sga.villagerCount <= sga.deceiverCount) {
-                        createDeceiverWinPopup();
-                    }
+                if(sga.villagerCount<=sga.deceiverCount){
+                    DocumentReference newUserRe=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+
+                    newUserRe.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String username=documentSnapshot.getString("Username");
+                            String password=documentSnapshot.getString("Password");
+                            double wins=documentSnapshot.getDouble("Wins");
+                            double losses=documentSnapshot.getDouble("Losses");
+                            double gamesplayed=documentSnapshot.getDouble("GamesPlayed");
+
+                            Map<String,Object> user=new HashMap<>();
+                            user.put("Username",username);
+                            user.put("Password",password);
+                            user.put("Wins",wins);
+                            user.put("Losses",losses+1);
+                            user.put("GamesPlayed",gamesplayed+1);
+
+                            newUserRe.set(user);
+                        }
+                    });
+                    createDeceiverWinPopup();
+                }
 
                     sga.nightCount++;
                     if (deceiver.getWoundCounter() == 2) {
@@ -212,7 +248,6 @@ public class StandardGameNightFragment extends Fragment {
                     manager.beginTransaction()
                             .replace(R.id.frameLayoutGame, standardGameNightLogFragment, standardGameNightLogFragment.getTag())
                             .commit();
-                }
             }
         });
 
@@ -448,71 +483,45 @@ public class StandardGameNightFragment extends Fragment {
     }
 
     public void createDeceiverWinPopup(){
-        StandardGameActivity sga=(StandardGameActivity)getActivity();
-        dialogBuilder=new AlertDialog.Builder(getContext());
-        final View contactPopupView=getLayoutInflater().inflate(R.layout.deceiverwinpopup,null);
+        dialogBuilder=new AlertDialog.Builder(getContext())
+                .setTitle("Defeat")
+                .setMessage("You have failed your duty as the village's detective")
+                .setPositiveButton("Restart", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent i1=new Intent(getContext(),StandardGameActivity.class);
+                        startActivity(i1);
+                    }
+                })
+                .setNegativeButton("Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent i2=new Intent(getContext(),MainPageActivity.class);
+                    }
+                });
 
-        decRestart=contactPopupView.findViewById(R.id.decRestart);
-        decMenu=contactPopupView.findViewById(R.id.decMenu);
-        decDays=contactPopupView.findViewById(R.id.decDays);
-        decDays.setText(sga.dayCount+" days");
-        decDawns=contactPopupView.findViewById(R.id.decDawns);
-        decDawns.setText(sga.dawnCount+" dawns");
-        decNights=contactPopupView.findViewById(R.id.decNights);
-        decNights.setText(sga.nightCount+" nights");
-
-        decRestart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), StandardGameActivity.class);
-                startActivity(i);
-                ((Activity) getActivity()).overridePendingTransition(0, 0);
-            }
-        });
-
-        decMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().finish();
-            }
-        });
-
-        dialogBuilder.setView(contactPopupView);
         deceiverDialog=dialogBuilder.create();
         deceiverDialog.show();
     }
 
     public void createVillageWinPopup(){
-        StandardGameActivity sga=(StandardGameActivity)getActivity();
-        dialogBuilder=new AlertDialog.Builder(getContext());
-        final View contactPopupView=getLayoutInflater().inflate(R.layout.villagewinpopup,null);
+        dialogBuilder=new AlertDialog.Builder(getContext())
+                .setTitle("Victory")
+                .setMessage("You have figured out the identities of the deceivers and done your duty as the village's detective")
+                .setPositiveButton("Restart", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent i1=new Intent(getContext(),StandardGameActivity.class);
+                        startActivity(i1);
+                    }
+                })
+                .setNegativeButton("Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent i2=new Intent(getContext(),MainPageActivity.class);
+                    }
+                });
 
-        vilRestart=contactPopupView.findViewById(R.id.vilRestart);
-        vilMenu=contactPopupView.findViewById(R.id.vilMenu);
-        vilDays=contactPopupView.findViewById(R.id.vilDays);
-        vilDays.setText(sga.dayCount+" days");
-        vilDawns=contactPopupView.findViewById(R.id.vilDawns);
-        vilDawns.setText(sga.dawnCount+" dawns");
-        vilNights=contactPopupView.findViewById(R.id.vilNights);
-        vilNights.setText(sga.nightCount+" nights");
-
-        vilRestart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), StandardGameActivity.class);
-                startActivity(i);
-                ((Activity) getActivity()).overridePendingTransition(0, 0);
-            }
-        });
-
-        vilMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().finish();
-            }
-        });
-
-        dialogBuilder.setView(contactPopupView);
         villageDialog=dialogBuilder.create();
         villageDialog.show();
     }
