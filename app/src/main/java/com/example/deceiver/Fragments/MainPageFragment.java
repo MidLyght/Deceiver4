@@ -76,6 +76,7 @@ public class MainPageFragment extends Fragment {
             public void onClick(View view) {
                 Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
                 startActivity(standardGameActivityIntent);
+
             }
         });
     }

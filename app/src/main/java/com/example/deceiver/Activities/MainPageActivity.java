@@ -12,6 +12,10 @@ import com.example.deceiver.R;
 public class MainPageActivity extends AppCompatActivity {
 
     @Override
+    public void onBackPressed () {
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);

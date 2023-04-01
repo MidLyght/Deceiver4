@@ -166,6 +166,8 @@ public class SignUpFragment extends Fragment {
         user.put("Username",usernameEt.getText().toString());
         user.put("Password",passEt.getText().toString());
         user.put("Wins",0);
+        user.put("GamesPlayed",0);
+        user.put("Losses",0);
 
         newUserRef.set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

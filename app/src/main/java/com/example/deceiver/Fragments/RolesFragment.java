@@ -3,10 +3,12 @@ package com.example.deceiver.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.deceiver.R;
 
@@ -16,6 +18,9 @@ import com.example.deceiver.R;
  * create an instance of this fragment.
  */
 public class RolesFragment extends Fragment {
+
+    View objectRolesFragment;
+    private Button doneBtn;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,10 +62,27 @@ public class RolesFragment extends Fragment {
         }
     }
 
+    private void attachComponents(){
+        doneBtn=objectRolesFragment.findViewById(R.id.rolesDoneBtn);
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IntroductionFragment introductionFragment=new IntroductionFragment();
+                FragmentManager manager=getFragmentManager();
+                manager.beginTransaction()
+                        .replace(R.id.frameLayoutMainPage,introductionFragment,introductionFragment.getTag())
+                        .commit();
+            }
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_roles, container, false);
+        objectRolesFragment=inflater.inflate(R.layout.fragment_roles, container, false);
+        attachComponents();
+
+        return objectRolesFragment;
     }
 }

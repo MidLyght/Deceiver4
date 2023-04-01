@@ -49,7 +49,7 @@ public class StandardGameDayFragment extends Fragment {
     private ImageView c1,c2,c3,c4,c5,c6,c7,c8,c1dead,c2dead,c3dead,c4dead,c5dead,c6dead,c7dead,c8dead,c1role,c2role,c3role,c4role,c5role,c6role,c7role,c8role,c1lynch,c2lynch,c3lynch,c4lynch,c5lynch,c6lynch,c7lynch,c8lynch,nextPhase;
     private TextView dayNum;
     ArrayList<StandardCharacter> order;
-    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog.Builder dialogBuilderDec,dialogBuilderVil;
     private AlertDialog deceiverDialog,villageDialog;
     private TextView decDays,decDawns,decNights,vilDays,vilDawns,vilNights;
     private Button decRestart,decMenu,vilRestart,vilMenu;
@@ -100,8 +100,85 @@ public class StandardGameDayFragment extends Fragment {
         // Inflate the layout for this fragment
         objectStandardGameDayFragment=inflater.inflate(R.layout.fragment_game_day,container,false);
         attachComponents();
+        checkGame();
 
         return objectStandardGameDayFragment;
+    }
+
+    private void checkGame(){
+        StandardGameActivity sga=(StandardGameActivity) getActivity();
+
+        if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
+            DocumentReference newUserRe=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+
+            newUserRe.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    String username=documentSnapshot.getString("Username");
+                    String password=documentSnapshot.getString("Password");
+                    double wins=documentSnapshot.getDouble("Wins");
+                    double losses=documentSnapshot.getDouble("Losses");
+                    double gamesplayed=documentSnapshot.getDouble("GamesPlayed");
+
+                    Map<String,Object> user=new HashMap<>();
+                    user.put("Username",username);
+                    user.put("Password",password);
+                    user.put("Wins",wins+1);
+                    user.put("Losses",losses);
+                    user.put("GamesPlayed",gamesplayed+1);
+
+                    newUserRe.set(user);
+                }
+            });
+
+            createVillageWinPopup();
+            return;
+        }
+
+        sga.deceiverCount=2;
+
+        if(!sga.deceiver.isAlive()&&sga.traitor.isAlive()||sga.deceiver.isAlive()&&!sga.traitor.isAlive())
+            sga.deceiverCount=1;
+
+        sga.villagerCount=0;
+
+        if(sga.witch.isAlive())
+            sga.villagerCount++;
+        if(sga.farmer1.isAlive())
+            sga.villagerCount++;
+        if(sga.farmer2.isAlive())
+            sga.villagerCount++;
+        if(sga.blacksmith.isAlive())
+            sga.villagerCount++;
+        if(sga.seer.isAlive())
+            sga.villagerCount++;
+        if(sga.guard.isAlive())
+            sga.villagerCount++;
+
+        if(sga.villagerCount<=sga.deceiverCount){
+            DocumentReference newUserRe=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
+
+            newUserRe.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    String username=documentSnapshot.getString("Username");
+                    String password=documentSnapshot.getString("Password");
+                    double wins=documentSnapshot.getDouble("Wins");
+                    double losses=documentSnapshot.getDouble("Losses");
+                    double gamesplayed=documentSnapshot.getDouble("GamesPlayed");
+
+                    Map<String,Object> user=new HashMap<>();
+                    user.put("Username",username);
+                    user.put("Password",password);
+                    user.put("Wins",wins);
+                    user.put("Losses",losses+1);
+                    user.put("GamesPlayed",gamesplayed+1);
+
+                    newUserRe.set(user);
+                }
+            });
+            createDeceiverWinPopup();
+        }
     }
 
     private void attachComponents() {
@@ -191,81 +268,11 @@ public class StandardGameDayFragment extends Fragment {
 
                 sga.dayCount++;
 
-                if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
-                    DocumentReference newUserRe=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
-
-                    newUserRe.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            String username=documentSnapshot.getString("Username");
-                            String password=documentSnapshot.getString("Password");
-                            double wins=documentSnapshot.getDouble("Wins");
-                            double losses=documentSnapshot.getDouble("Losses");
-                            double gamesplayed=documentSnapshot.getDouble("GamesPlayed");
-
-                            Map<String,Object> user=new HashMap<>();
-                            user.put("Username",username);
-                            user.put("Password",password);
-                            user.put("Wins",wins+1);
-                            user.put("Losses",losses);
-                            user.put("GamesPlayed",gamesplayed+1);
-
-                            newUserRe.set(user);
-                        }
-                    });
-
-                    createVillageWinPopup();
-                }
-
-                sga.deceiverCount=2;
-
-                if(!sga.deceiver.isAlive()&&sga.traitor.isAlive()||sga.deceiver.isAlive()&&!sga.traitor.isAlive())
-                    sga.deceiverCount=1;
-
-                sga.villagerCount=0;
-
-                if(sga.witch.isAlive())
-                    sga.villagerCount++;
-                if(sga.farmer1.isAlive())
-                    sga.villagerCount++;
-                if(sga.farmer2.isAlive())
-                    sga.villagerCount++;
-                if(sga.blacksmith.isAlive())
-                    sga.villagerCount++;
-                if(sga.seer.isAlive())
-                    sga.villagerCount++;
-                if(sga.guard.isAlive())
-                    sga.villagerCount++;
-
-                if(sga.villagerCount<=sga.deceiverCount){
-                    DocumentReference newUserRe=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
-
-                    newUserRe.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            String username=documentSnapshot.getString("Username");
-                            String password=documentSnapshot.getString("Password");
-                            double wins=documentSnapshot.getDouble("Wins");
-                            double losses=documentSnapshot.getDouble("Losses");
-                            double gamesplayed=documentSnapshot.getDouble("GamesPlayed");
-
-                            Map<String,Object> user=new HashMap<>();
-                            user.put("Username",username);
-                            user.put("Password",password);
-                            user.put("Wins",wins);
-                            user.put("Losses",losses+1);
-                            user.put("GamesPlayed",gamesplayed+1);
-
-                            newUserRe.set(user);
-                        }
-                    });
-                    createDeceiverWinPopup();
-                }
-
                 StandardGameDawnFragment standardGameDawnFragment=new StandardGameDawnFragment();
                 FragmentManager manager=getFragmentManager();
                 manager.beginTransaction()
                         .replace(R.id.frameLayoutGame,standardGameDawnFragment,standardGameDawnFragment.getTag())
+                        .disallowAddToBackStack()
                         .commit();
             }
         });
@@ -564,8 +571,9 @@ public class StandardGameDayFragment extends Fragment {
     }
 
     public void createDeceiverWinPopup(){
-        dialogBuilder=new AlertDialog.Builder(getContext())
+        dialogBuilderDec=new AlertDialog.Builder(getContext())
                 .setTitle("Defeat")
+                .setCancelable(false)
                 .setMessage("You have failed your duty as the village's detective")
                 .setPositiveButton("Restart", new DialogInterface.OnClickListener() {
                     @Override
@@ -578,16 +586,18 @@ public class StandardGameDayFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent i2=new Intent(getContext(),MainPageActivity.class);
+                        startActivity(i2);
                     }
                 });
 
-        deceiverDialog=dialogBuilder.create();
+        deceiverDialog=dialogBuilderDec.create();
         deceiverDialog.show();
     }
 
     public void createVillageWinPopup(){
-        dialogBuilder=new AlertDialog.Builder(getContext())
+        dialogBuilderVil=new AlertDialog.Builder(getContext())
                 .setTitle("Victory")
+                .setCancelable(false)
                 .setMessage("You have figured out the identities of the deceivers and done your duty as the village's detective")
                 .setPositiveButton("Restart", new DialogInterface.OnClickListener() {
                     @Override
@@ -600,10 +610,11 @@ public class StandardGameDayFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent i2=new Intent(getContext(),MainPageActivity.class);
+                        startActivity(i2);
                     }
                 });
 
-        villageDialog=dialogBuilder.create();
+        villageDialog=dialogBuilderVil.create();
         villageDialog.show();
     }
 }
