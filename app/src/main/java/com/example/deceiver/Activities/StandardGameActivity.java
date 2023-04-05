@@ -25,16 +25,24 @@ import com.example.deceiver.Fragments.StandardGameNightLogFragment;
 import com.example.deceiver.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Random;
+import java.util.TimeZone;
 
 public class StandardGameActivity extends AppCompatActivity {
 
     public StandardCharacter deceiver,traitor,farmer1,farmer2,witch,blacksmith,seer,guard;
     public ArrayList<StandardCharacter> order;
-    public int dayCount=1,dawnCount=1,nightCount=0;
+    public int dayCount=1,dawnCount=0,nightCount=0;
     public int villagerCount,deceiverCount;
     public String dawnLog="",nightLog="";
+
+    @Override
+    public void onBackPressed () {
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

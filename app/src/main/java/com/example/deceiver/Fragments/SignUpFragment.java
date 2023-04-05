@@ -27,7 +27,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentReference;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
@@ -162,12 +168,17 @@ public class SignUpFragment extends Fragment {
     public void addUserToFirestore() {
         DocumentReference newUserRef=fbs.getFire().collection("users").document(mailEt.getText().toString());
 
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+
         Map<String,Object> user=new HashMap<>();
         user.put("Username",usernameEt.getText().toString());
         user.put("Password",passEt.getText().toString());
         user.put("Wins",0);
         user.put("GamesPlayed",0);
         user.put("Losses",0);
+        user.put("CreationDate",formattedDate);
 
         newUserRef.set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

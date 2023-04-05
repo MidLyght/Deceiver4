@@ -32,9 +32,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -108,6 +114,11 @@ public class StandardGameDayFragment extends Fragment {
     private void checkGame(){
         StandardGameActivity sga=(StandardGameActivity) getActivity();
 
+        Calendar cal=Calendar.getInstance();
+        cal.add(Calendar.HOUR,+3); // Because the Israeli timezone is GMT+3
+        Date date1= cal.getTime() ;
+        String datestring = DateFormat.getInstance().format(date1); // Game date
+
         if(!sga.deceiver.isAlive()&&!sga.traitor.isAlive()){
             DocumentReference newUserRe=fbs.getFire().collection("users").document(fbs.getAuth().getCurrentUser().getEmail());
 
@@ -119,6 +130,14 @@ public class StandardGameDayFragment extends Fragment {
                     double wins=documentSnapshot.getDouble("Wins");
                     double losses=documentSnapshot.getDouble("Losses");
                     double gamesplayed=documentSnapshot.getDouble("GamesPlayed");
+                    String formattedDate=documentSnapshot.getString("CreationDate");
+                    double zeroes=documentSnapshot.getDouble("GamesPlayed")+1;
+                    int zerocount=0;
+                    while((((int)zeroes/10))!=0){
+                        zeroes=zeroes/10.0;
+                        zerocount++;
+                    }
+                    String gameDoc=Integer.toString(zerocount)+Double.toString(gamesplayed+1);
 
                     Map<String,Object> user=new HashMap<>();
                     user.put("Username",username);
@@ -126,8 +145,39 @@ public class StandardGameDayFragment extends Fragment {
                     user.put("Wins",wins+1);
                     user.put("Losses",losses);
                     user.put("GamesPlayed",gamesplayed+1);
+                    user.put("CreationDate",formattedDate);
+
+                    DocumentReference newUserGameRe= newUserRe.collection("gamehistory").document(gameDoc);
+
+                    int bodyCount=0;
+
+                    if(!sga.deceiver.isAlive())
+                        bodyCount++;
+                    if(!sga.traitor.isAlive())
+                        bodyCount++;
+                    if(!sga.witch.isAlive())
+                        bodyCount++;
+                    if(!sga.farmer1.isAlive())
+                        bodyCount++;
+                    if(!sga.farmer2.isAlive())
+                        bodyCount++;
+                    if(!sga.blacksmith.isAlive())
+                        bodyCount++;
+                    if(!sga.seer.isAlive())
+                        bodyCount++;
+                    if(!sga.guard.isAlive())
+                        bodyCount++;
+
+                    Map<String,Object> game=new HashMap<>();
+                    game.put("Dawns",sga.dawnCount);
+                    game.put("Days",sga.dayCount);
+                    game.put("Nights",sga.nightCount);
+                    game.put("BodyCount",bodyCount);
+                    game.put("Result","Victory");
+                    game.put("Date",datestring);
 
                     newUserRe.set(user);
+                    newUserGameRe.set(game);
                 }
             });
 
@@ -166,6 +216,14 @@ public class StandardGameDayFragment extends Fragment {
                     double wins=documentSnapshot.getDouble("Wins");
                     double losses=documentSnapshot.getDouble("Losses");
                     double gamesplayed=documentSnapshot.getDouble("GamesPlayed");
+                    String formattedDate=documentSnapshot.getString("CreationDate");
+                    double zeroes=documentSnapshot.getDouble("GamesPlayed")+1;
+                    int zerocount=0;
+                    while((((int)zeroes/10))!=0){
+                        zeroes=zeroes/10.0;
+                        zerocount++;
+                    }
+                    String gameDoc=Integer.toString(zerocount)+Double.toString(gamesplayed+1);
 
                     Map<String,Object> user=new HashMap<>();
                     user.put("Username",username);
@@ -173,8 +231,39 @@ public class StandardGameDayFragment extends Fragment {
                     user.put("Wins",wins);
                     user.put("Losses",losses+1);
                     user.put("GamesPlayed",gamesplayed+1);
+                    user.put("CreationDate",formattedDate);
+
+                    DocumentReference newUserGameRe= newUserRe.collection("gamehistory").document(gameDoc);
+
+                    int bodyCount=0;
+
+                    if(!sga.deceiver.isAlive())
+                        bodyCount++;
+                    if(!sga.traitor.isAlive())
+                        bodyCount++;
+                    if(!sga.witch.isAlive())
+                        bodyCount++;
+                    if(!sga.farmer1.isAlive())
+                        bodyCount++;
+                    if(!sga.farmer2.isAlive())
+                        bodyCount++;
+                    if(!sga.blacksmith.isAlive())
+                        bodyCount++;
+                    if(!sga.seer.isAlive())
+                        bodyCount++;
+                    if(!sga.guard.isAlive())
+                        bodyCount++;
+
+                    Map<String,Object> game=new HashMap<>();
+                    game.put("Dawns",sga.dawnCount);
+                    game.put("Days",sga.dayCount);
+                    game.put("Nights",sga.nightCount);
+                    game.put("BodyCount",bodyCount);
+                    game.put("Result","Defeat");
+                    game.put("Date",datestring);
 
                     newUserRe.set(user);
+                    newUserGameRe.set(game);
                 }
             });
             createDeceiverWinPopup();
@@ -184,6 +273,7 @@ public class StandardGameDayFragment extends Fragment {
     private void attachComponents() {
         sga=(StandardGameActivity) getActivity();
         fbs=FirebaseServices.getInstance();
+        sga.dayCount++;
 
         order=sga.order;
 
@@ -265,8 +355,6 @@ public class StandardGameDayFragment extends Fragment {
                 }
 
                 sga.order=order;
-
-                sga.dayCount++;
 
                 StandardGameDawnFragment standardGameDawnFragment=new StandardGameDawnFragment();
                 FragmentManager manager=getFragmentManager();
