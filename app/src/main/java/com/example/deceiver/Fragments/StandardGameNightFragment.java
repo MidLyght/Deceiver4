@@ -1,21 +1,18 @@
 package com.example.deceiver.Fragments;
 
-import static android.content.ContentValues.TAG;
 import static com.example.deceiver.Enums.StandardRole.Deceiver;
 import static com.example.deceiver.Enums.StandardRole.Seer;
 import static com.example.deceiver.Enums.StandardRole.Traitor;
+import static com.example.deceiver.Enums.StandardRole.Witch;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,27 +23,20 @@ import android.widget.TextView;
 import com.example.deceiver.Activities.MainPageActivity;
 import com.example.deceiver.Activities.StandardGameActivity;
 import com.example.deceiver.DataClasses.StandardCharacter;
-import com.example.deceiver.Enums.Phase;
 import com.example.deceiver.Enums.StandardRole;
 import com.example.deceiver.FirebaseServices;
 import com.example.deceiver.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -368,7 +358,7 @@ public class StandardGameNightFragment extends Fragment {
             c1role.setImageResource(R.drawable.eye);
         if(order.get(0).getRole()==StandardRole.Traitor)
             c1role.setImageResource(R.drawable.traitoricon);
-        if(order.get(0).getRole()==StandardRole.Witch)
+        if(order.get(0).getRole()== Witch)
             c1role.setImageResource(R.drawable.witchiconrole);
         if(order.get(0).getRole()==StandardRole.Blacksmith)
             c1role.setImageResource(R.drawable.blacksmithicon);
@@ -383,7 +373,7 @@ public class StandardGameNightFragment extends Fragment {
             c2role.setImageResource(R.drawable.eye);
         if(order.get(1).getRole()==StandardRole.Traitor)
             c2role.setImageResource(R.drawable.traitoricon);
-        if(order.get(1).getRole()==StandardRole.Witch)
+        if(order.get(1).getRole()== Witch)
             c2role.setImageResource(R.drawable.witchiconrole);
         if(order.get(1).getRole()==StandardRole.Blacksmith)
             c2role.setImageResource(R.drawable.blacksmithicon);
@@ -398,7 +388,7 @@ public class StandardGameNightFragment extends Fragment {
             c3role.setImageResource(R.drawable.eye);
         if(order.get(2).getRole()==StandardRole.Traitor)
             c3role.setImageResource(R.drawable.traitoricon);
-        if(order.get(2).getRole()==StandardRole.Witch)
+        if(order.get(2).getRole()== Witch)
             c3role.setImageResource(R.drawable.witchiconrole);
         if(order.get(2).getRole()==StandardRole.Blacksmith)
             c3role.setImageResource(R.drawable.blacksmithicon);
@@ -413,7 +403,7 @@ public class StandardGameNightFragment extends Fragment {
             c4role.setImageResource(R.drawable.eye);
         if(order.get(3).getRole()==StandardRole.Traitor)
             c4role.setImageResource(R.drawable.traitoricon);
-        if(order.get(3).getRole()==StandardRole.Witch)
+        if(order.get(3).getRole()== Witch)
             c4role.setImageResource(R.drawable.witchiconrole);
         if(order.get(3).getRole()==StandardRole.Blacksmith)
             c4role.setImageResource(R.drawable.blacksmithicon);
@@ -428,7 +418,7 @@ public class StandardGameNightFragment extends Fragment {
             c5role.setImageResource(R.drawable.eye);
         if(order.get(4).getRole()==StandardRole.Traitor)
             c5role.setImageResource(R.drawable.traitoricon);
-        if(order.get(4).getRole()==StandardRole.Witch)
+        if(order.get(4).getRole()== Witch)
             c5role.setImageResource(R.drawable.witchiconrole);
         if(order.get(4).getRole()==StandardRole.Blacksmith)
             c5role.setImageResource(R.drawable.blacksmithicon);
@@ -443,7 +433,7 @@ public class StandardGameNightFragment extends Fragment {
             c6role.setImageResource(R.drawable.eye);
         if(order.get(5).getRole()==StandardRole.Traitor)
             c6role.setImageResource(R.drawable.traitoricon);
-        if(order.get(5).getRole()==StandardRole.Witch)
+        if(order.get(5).getRole()== Witch)
             c6role.setImageResource(R.drawable.witchiconrole);
         if(order.get(5).getRole()==StandardRole.Blacksmith)
             c6role.setImageResource(R.drawable.blacksmithicon);
@@ -458,7 +448,7 @@ public class StandardGameNightFragment extends Fragment {
             c7role.setImageResource(R.drawable.eye);
         if(order.get(6).getRole()==StandardRole.Traitor)
             c7role.setImageResource(R.drawable.traitoricon);
-        if(order.get(6).getRole()==StandardRole.Witch)
+        if(order.get(6).getRole()== Witch)
             c7role.setImageResource(R.drawable.witchiconrole);
         if(order.get(6).getRole()==StandardRole.Blacksmith)
             c7role.setImageResource(R.drawable.blacksmithicon);
@@ -473,7 +463,7 @@ public class StandardGameNightFragment extends Fragment {
             c8role.setImageResource(R.drawable.eye);
         if(order.get(7).getRole()==StandardRole.Traitor)
             c8role.setImageResource(R.drawable.traitoricon);
-        if(order.get(7).getRole()==StandardRole.Witch)
+        if(order.get(7).getRole()== Witch)
             c8role.setImageResource(R.drawable.witchiconrole);
         if(order.get(7).getRole()==StandardRole.Blacksmith)
             c8role.setImageResource(R.drawable.blacksmithicon);

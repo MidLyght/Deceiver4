@@ -1,66 +1,66 @@
 package com.example.deceiver.DataClasses;
 
 public class GameModel {
-    private String date,result;
-    private long bodyCount,dawns,nights,days;
+    private String Date,Result;
+    private long BodyCount,Dawns,Nights,Days;
 
     public GameModel() {
     }
 
-    public GameModel(String date, String result, long bodyCount, long dawns, long nights, long days) {
-        this.date = date;
-        this.result = result;
-        this.bodyCount = bodyCount;
-        this.dawns = dawns;
-        this.nights = nights;
-        this.days = days;
+    public GameModel(String Date, String Result, long BodyCount, long Dawns, long Nights, long Days) {
+        this.Date = Date;
+        this.Result = Result;
+        this.BodyCount = BodyCount;
+        this.Dawns = Dawns;
+        this.Nights = Nights;
+        this.Days = Days;
     }
 
     public String getDate() {
-        return date;
+        return Date;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        Date = date;
     }
 
     public String getResult() {
-        return result;
+        return Result;
     }
 
     public void setResult(String result) {
-        this.result = result;
+        Result = result;
     }
 
     public long getBodyCount() {
-        return bodyCount;
+        return BodyCount;
     }
 
     public void setBodyCount(long bodyCount) {
-        this.bodyCount = bodyCount;
+        BodyCount = bodyCount;
     }
 
     public long getDawns() {
-        return dawns;
+        return Dawns;
     }
 
     public void setDawns(long dawns) {
-        this.dawns = dawns;
+        Dawns = dawns;
     }
 
     public long getNights() {
-        return nights;
+        return Nights;
     }
 
     public void setNights(long nights) {
-        this.nights = nights;
+        Nights = nights;
     }
 
     public long getDays() {
-        return days;
+        return Days;
     }
 
     public void setDays(long days) {
-        this.days = days;
+        Days = days;
     }
 }

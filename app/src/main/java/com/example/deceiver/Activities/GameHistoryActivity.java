@@ -2,20 +2,17 @@ package com.example.deceiver.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.deceiver.DataClasses.GameModel;
-import com.example.deceiver.Fragments.GameHistoryFragment;
-import com.example.deceiver.Fragments.MainPageFragment;
 import com.example.deceiver.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -56,6 +53,10 @@ public class GameHistoryActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull GameViewHolder holder, int position, @NonNull GameModel model) {
                 holder.gameResult.setText(model.getResult());
+                if(model.getResult().equals("Victory"))
+                    holder.gameResult.setTextColor(Color.parseColor("#1cc723"));
+                else
+                    holder.gameResult.setTextColor(Color.parseColor("#d71717"));
                 holder.gameDate.setText(model.getDate());
                 holder.gameDays.setText(model.getDays()+" days");
                 holder.gameDawns.setText(model.getDawns()+ " dawns");
@@ -65,7 +66,10 @@ public class GameHistoryActivity extends AppCompatActivity {
         };
 
         gameHistoryRecyclerView.setHasFixedSize(true);
-        gameHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        gameHistoryRecyclerView.setLayoutManager(linearLayoutManager);
         gameHistoryRecyclerView.setAdapter(adapter);
     }
 

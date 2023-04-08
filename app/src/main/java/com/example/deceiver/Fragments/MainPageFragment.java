@@ -4,35 +4,23 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
+import android.widget.Toast;
 
 import com.example.deceiver.Activities.GameHistoryActivity;
+import com.example.deceiver.Activities.MainActivity;
 import com.example.deceiver.Activities.StandardGameActivity;
-import com.example.deceiver.DataClasses.GameModel;
-import com.example.deceiver.FirebaseServices;
 import com.example.deceiver.R;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,9 +32,8 @@ public class MainPageFragment extends Fragment {
     View objectMainPageFragment;
     private FirebaseFirestore fbfs;
     private FirebaseAuth fba;
-    private FirestoreRecyclerAdapter adapter;
     private Button btnPlay,btnIntro,btnProfile;
-    private RecyclerView gameHistoryRecyclerView;
+    private TextView logOut;
     private TextView usernameProfile,dateProfile,gamesProfile,winsProfile,defeatsProfile;
     private Button showGameHistory;
     private AlertDialog.Builder dialogBuilder;
@@ -86,32 +73,30 @@ public class MainPageFragment extends Fragment {
         btnPlay=objectMainPageFragment.findViewById(R.id.btnPlayMainPage);
         btnIntro=objectMainPageFragment.findViewById(R.id.btnIntroMainPage);
         btnProfile=objectMainPageFragment.findViewById(R.id.btnProfileMainPage);
+        logOut=objectMainPageFragment.findViewById(R.id.logOutMainPage);
 
-        btnIntro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                IntroductionFragment introductionFragment=new IntroductionFragment();
-                FragmentManager manager=getFragmentManager();
-                manager.beginTransaction()
-                        .replace(R.id.frameLayoutMainPage,introductionFragment,introductionFragment.getTag())
-                        .addToBackStack(null)
-                        .commit();
-            }
+        btnIntro.setOnClickListener(view -> {
+            IntroductionFragment introductionFragment=new IntroductionFragment();
+            FragmentManager manager=getFragmentManager();
+            manager.beginTransaction()
+                    .replace(R.id.frameLayoutMainPage,introductionFragment,introductionFragment.getTag())
+                    .addToBackStack(null)
+                    .commit();
         });
 
-        btnPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
-                startActivity(standardGameActivityIntent);
-            }
+        btnPlay.setOnClickListener(view -> {
+            Intent standardGameActivityIntent = new Intent(getContext(), StandardGameActivity.class);
+            startActivity(standardGameActivityIntent);
         });
 
-        btnProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createProfilePopUp();
-            }
+        btnProfile.setOnClickListener(view ->
+                createProfilePopUp());
+
+        logOut.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(getContext(), "User signed out", Toast.LENGTH_SHORT).show();
+            Intent i=new Intent(getContext(),MainActivity.class);
+            startActivity(i);
         });
     }
 
@@ -151,75 +136,21 @@ public class MainPageFragment extends Fragment {
         defeatsProfile=contactPopUpView.findViewById(R.id.gamesLostProfile);
         showGameHistory=contactPopUpView.findViewById(R.id.gameHistoryProfile);
 
-        showGameHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent gameHistoryActivityIntent = new Intent(getContext(), GameHistoryActivity.class);
-                startActivity(gameHistoryActivityIntent);
-            }
+        showGameHistory.setOnClickListener(view -> {
+            Intent gameHistoryActivityIntent = new Intent(getContext(), GameHistoryActivity.class);
+            startActivity(gameHistoryActivityIntent);
         });
-
-       /* Query query=fbfs.collection("users").document(fba.getCurrentUser().getEmail()).collection("gamehistory");
-
-        FirestoreRecyclerOptions<GameModel> options=new FirestoreRecyclerOptions.Builder<GameModel>()
-                .setQuery(query,GameModel.class)
-                .build();
-        adapter= new FirestoreRecyclerAdapter<GameModel, GameViewHolder>(options) {
-            @NonNull
-            @Override
-            public GameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view=LayoutInflater.from(parent.getContext()).inflate(R.layout.gameitem,parent,false);
-                return new GameViewHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull GameViewHolder holder, int position, @NonNull GameModel model) {
-                holder.gameResult.setText(model.getResult());
-                holder.gameDate.setText(model.getDate());
-                holder.gameDays.setText(model.getDate()+" days");
-                holder.gameDawns.setText(model.getDawns()+ " dawns");
-                holder.gameNights.setText(model.getNights()+" nights");
-                holder.gameBodyCount.setText(model.getBodyCount()+" deaths");
-            }
-        };*/
-
-        /*gameHistoryRecyclerView.setHasFixedSize(true);
-        gameHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        gameHistoryRecyclerView.setAdapter(adapter);*/
 
         DocumentReference newUserRe=fbfs.collection("users").document(fba.getCurrentUser().getEmail());
-        newUserRe.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                usernameProfile.setText(documentSnapshot.getString("Username"));
-                dateProfile.setText("Detective since "+documentSnapshot.getString("CreationDate"));
-                gamesProfile.setText(documentSnapshot.getLong("GamesPlayed").toString()+" games played");
-                winsProfile.setText(documentSnapshot.getLong("Wins").toString()+" games won");
-                defeatsProfile.setText(documentSnapshot.getLong("Losses").toString()+" games lost");
-            }
+        newUserRe.get().addOnSuccessListener(documentSnapshot -> {
+            usernameProfile.setText(documentSnapshot.getString("Username"));
+            dateProfile.setText("Detective since "+documentSnapshot.getString("CreationDate"));
+            gamesProfile.setText(documentSnapshot.getLong("GamesPlayed").toString()+" games played");
+            winsProfile.setText(documentSnapshot.getLong("Wins").toString()+" games won");
+            defeatsProfile.setText(documentSnapshot.getLong("Losses").toString()+" games lost");
         });
-
-        /*if(showGameHistory.isChecked())
-            gameHistoryRecyclerView.setVisibility(View.VISIBLE);
-        if(!showGameHistory.isChecked())
-            gameHistoryRecyclerView.setVisibility(View.INVISIBLE);*/
 
         dialogBuilder.setView(contactPopUpView);
         dialogBuilder.create().show();
-    }
-
-    private class GameViewHolder extends RecyclerView.ViewHolder{
-
-        private TextView gameResult,gameDate,gameDays,gameDawns,gameNights,gameBodyCount;
-        public GameViewHolder(@NonNull View itemView){
-            super(itemView);
-
-            gameResult=itemView.findViewById(R.id.resultGameItem);
-            gameDate=itemView.findViewById(R.id.dateGameItem);
-            gameDays=itemView.findViewById(R.id.daysGameItem);
-            gameDawns=itemView.findViewById(R.id.dawnsGameItem);
-            gameNights=itemView.findViewById(R.id.nightsGameItem);
-            gameBodyCount=itemView.findViewById(R.id.bodyCountGameItem);
-        }
     }
 }

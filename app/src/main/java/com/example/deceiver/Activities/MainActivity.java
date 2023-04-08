@@ -14,10 +14,13 @@ import java.util.TimeZone;
 public class MainActivity extends AppCompatActivity {
 
     @Override
+    public void onBackPressed(){
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Calendar.getInstance().setTimeZone(TimeZone.getTimeZone("GMT"+3));
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frameLayoutMain, new LogInFragment());
