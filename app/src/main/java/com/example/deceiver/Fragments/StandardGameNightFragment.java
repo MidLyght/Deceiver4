@@ -526,6 +526,7 @@ public class StandardGameNightFragment extends Fragment {
                 //
                 sga.nightLog+="Character "+(val+1)+" was saved by the witch!\n";
                 order.get(val).setVivified(false);
+                sga.witch.setCanVivify(false);
             }
             else if(order.get(val).isProtected()){
                 guard.setExposed(true);

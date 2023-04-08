@@ -304,7 +304,6 @@ public class StandardGameDawnFragment extends Fragment {
                 val=random.nextInt(8);
             }
             order.get(val).setVivified(true);
-            witch.setCanVivify(false);
         }
 
         if(seer.isAlive() && sga.dawnCount%3==0){
