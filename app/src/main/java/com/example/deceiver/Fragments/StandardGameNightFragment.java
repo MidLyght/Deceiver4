@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,13 +47,11 @@ public class StandardGameNightFragment extends Fragment {
     View objectStandardGameNightFragment;
     private FirebaseServices fbs;
     private StandardCharacter deceiver,traitor,farmer1,farmer2,witch,blacksmith,seer,guard;
-    private ImageView c1,c2,c3,c4,c5,c6,c7,c8,c1dead,c2dead,c3dead,c4dead,c5dead,c6dead,c7dead,c8dead,c1role,c2role,c3role,c4role,c5role,c6role,c7role,c8role,nextPhase;
+    private ImageView c1dead,c2dead,c3dead,c4dead,c5dead,c6dead,c7dead,c8dead,c1role,c2role,c3role,c4role,c5role,c6role,c7role,c8role,nextPhase;
     private TextView dayNum;
     private ArrayList<StandardCharacter> order;
     private AlertDialog.Builder dialogBuilderDec,dialogBuilderVil;
     private AlertDialog deceiverDialog,villageDialog;
-    private TextView decDays,decDawns,decNights,vilDays,vilDawns,vilNights;
-    private Button decRestart,decMenu,vilRestart,vilMenu;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -282,15 +279,6 @@ public class StandardGameNightFragment extends Fragment {
         guard=sga.guard;
 
         order=sga.order;
-
-        c1=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar1);
-        c2=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar2);
-        c3=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar3);
-        c4=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar4);
-        c5=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar5);
-        c6=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar6);
-        c7=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar7);
-        c8=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar8);
 
         c1dead=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar1Dead);
         c2dead=objectStandardGameNightFragment.findViewById(R.id.imgGameNightChar2Dead);

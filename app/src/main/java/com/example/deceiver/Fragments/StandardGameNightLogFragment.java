@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,8 +43,6 @@ public class StandardGameNightLogFragment extends Fragment {
 
     private AlertDialog.Builder dialogBuilderDec,dialogBuilderVil;
     private AlertDialog deceiverDialog,villageDialog;
-    private TextView decDays,decDawns,decNights,vilDays,vilDawns,vilNights;
-    private Button decRestart,decMenu,vilRestart,vilMenu;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
